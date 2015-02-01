@@ -1,0 +1,84 @@
+---
+title       : Ch 1 - T tests and CIs
+subtitle    : Stat 217
+framework   : bootstrap3        # {io2012, html5slides, shower, dzslides, ...}
+highlighter : highlight  # {highlight.js, prettify, highlight}
+hitheme     : tomorrow      # 
+widgets     : [quiz, mathjax]            # {mathjax, quiz, bootstrap}
+mode        : selfcontained # {standalone, draft}
+knit        : slidify::knit2slides
+layout      : deck3
+assets      : 
+  css       : 
+    - "libraries/frameworks/bootstrap3/css/custom.css"
+    - "libraries/frameworks/bootstrap3/css/moving_sidebar.css"
+    - "http://fonts.googleapis.com/css?family=Vollkorn"
+    - "http://fonts.googleapis.com/css?family=Droid%20Sans%20Mono"
+---
+
+```{r setup, echo=FALSE, message=FALSE, warning=FALSE, cache=FALSE}
+library(knitr)
+opts_chunk$set(echo = T, 
+               message = F, 
+               warning = F, 
+               cache = F, 
+               tidy = F, 
+               comment = "#>", 
+               fig.align = "center", 
+               fig.width = 8, 
+               fig.height = 5, 
+               digits = 3, 
+               size = "small")
+options(show.signif.stars = F, 
+        digits = 3)
+```
+
+## Introduction
+
+In this activity ...
+
+---
+## The Insect Sprays Data
+
+In an agricultural experiment, 72 plots of land were randomly assigned to be treated with one of six different insecticides.  The next day, the number of insects in each plot were counted.  We will test to see if there is a difference in the number of insects for at least one of the sprays.
+
+```{r insect-data}
+data(InsectSprays)  # load the data
+boxplot(count ~ spray, data = InsectSprays)
+```
+
+
+---
+## The ACT Data
+A school is interested in comparing ACT scores for students with baseball scholarships, football scholarships, and non-athletes.  Let Group 1 be the Baseball athletes, Group 2 be the non-athletes, and Group 3 be the Football athletes.  They want to know if one of the groups has different ACT scores from the other.  
+
+```{r act-data, results='asis'}
+act <- read.csv("act-scores.csv", header = T)
+```
+
+```{r act-table, echo = FALSE, results='asis'}
+to_print <- data.frame(Baseball = c(25, 22, 19, 25, 24, 25, 24, 23), 
+                       Non.athletes = c(21, 27, 29, 26, 30, 27, 26, 23), 
+                       Football = c(22, 21, 24, 27, 19, 23, 17, ""))
+kable(to_print, format = "markdown", align = "c")
+```
+
+--- &radio
+## Some Information about the ACT Data
+
+What are $n_1$, $n_2$, $n_3$?  How about $y_{12}$?
+
+1. 7; 8; 8; 27
+2. _8; 8; 7; 21_
+3. 8; 7; 8; 25
+4. 8; 8; 7; 25
+5. 7; 8; 8; 22
+*** .hint
+What is the sample size of each group?  What is the value of the first observation in group 2?
+
+*** .explanation
+There are 8 observations in both the baseball and non-athletes groups, but only 7 in the football group.  The first row in the second column is $y_{12}$.
+
+
+
+

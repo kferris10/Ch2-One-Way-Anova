@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Ch 1 - T tests and CIs</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+  <link rel="icon" type="image/png" href="favicon.ico">
+  <link  rel="stylesheet" 
+    href="http://netdna.bootstrapcdn.com/font-awesome/2.0/css/font-awesome.css">
+  <link rel="stylesheet" href="libraries/frameworks/bootstrap3/css/bootstrap.min.css">
+  
+  <link rel="stylesheet" href="libraries/frameworks/bootstrap3/css/main.css">
+  <link rel="stylesheet" href="libraries/highlighters/highlight/css/tomorrow.css" />
+  <script src="libraries/frameworks/bootstrap3/js/vendor/modernizr-2.6.1-respond-1.1.0.min.js"></script>
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
+  <script>window.jQuery || document.write('<script src="libraries/frameworks/bootstrap3/js/vendor/jquery-1.8.2.min.js"><\/script>')</script>
+    <link rel=stylesheet href="libraries/widgets/quiz/css/demo.css"></link>
+<link rel=stylesheet href="./assets/css/ribbons.css"></link>
+<link rel=stylesheet href="libraries/frameworks/bootstrap3/css/custom.css"></link>
+<link rel=stylesheet href="libraries/frameworks/bootstrap3/css/moving_sidebar.css"></link>
+<link rel=stylesheet href="http://fonts.googleapis.com/css?family=Vollkorn"></link>
+<link rel=stylesheet href="http://fonts.googleapis.com/css?family=Droid%20Sans%20Mono"></link>
+
+  <script src="libraries/frameworks/bootstrap3/js/jquery.js"></script>
+  
+</head>
+<body data-spy = "scroll" data-target = ".page-sidebar">
+   <!--[if lt IE 7]>
+     <p class="chromeframe">You are using an outdated browser. 
+       <a href="http://browsehappy.com/">Upgrade your browser today</a> or 
+       <a href="http://www.google.com/chromeframe/?redirect=true"> 
+         install Google Chrome Frame
+       </a> to better experience this site.
+    </p>
+   <![endif]-->
+   <!-- Ref: http://twitter.github.com/bootstrap/examples/hero.html -->
+
+  <div class="container">
+
+    <div class = "row">
+
+      <div class = "col-md-9 col-sm-12">
+
+        <div class="jumbotron">
+          <div class="container">
+            <h1>Ch 1 - T tests and CIs</h1>
+            <h3>Stat 217</h3>
+          </div>
+        </div>
+
+        <section id="slide-1">
+  <div class="page-header">
+    <h2>Introduction</h2>
+  </div>
+  <p>In this activity ...</p>
+
+</section>
+<section id="slide-2">
+  <div class="page-header">
+    <h2>The Insect Sprays Data</h2>
+  </div>
+  <p>In an agricultural experiment, 72 plots of land were randomly assigned to be treated with one of six different insecticides.  The next day, the number of insects in each plot were counted.  We will test to see if there is a difference in the number of insects for at least one of the sprays.</p>
+
+<pre><code class="r">data(InsectSprays)  # load the data
+boxplot(count ~ spray, data = InsectSprays)
+</code></pre>
+
+<p><img src="assets/fig/insect-data-1.png" title="plot of chunk insect-data" alt="plot of chunk insect-data" style="display: block; margin: auto;" /></p>
+
+</section>
+<section id="slide-3">
+  <div class="page-header">
+    <h2>The ACT Data</h2>
+  </div>
+  <p>A school is interested in comparing ACT scores for students with baseball scholarships, football scholarships, and non-athletes.  Let Group 1 be the Baseball athletes, Group 2 be the non-athletes, and Group 3 be the Football athletes.  They want to know if one of the groups has different ACT scores from the other.  </p>
+
+<pre><code class="r">act &lt;- read.csv(&quot;act-scores.csv&quot;, header = T)
+</code></pre>
+
+<table><thead>
+<tr>
+<th align="center">Baseball</th>
+<th align="center">Non.athletes</th>
+<th align="center">Football</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="center">25</td>
+<td align="center">21</td>
+<td align="center">22</td>
+</tr>
+<tr>
+<td align="center">22</td>
+<td align="center">27</td>
+<td align="center">21</td>
+</tr>
+<tr>
+<td align="center">19</td>
+<td align="center">29</td>
+<td align="center">24</td>
+</tr>
+<tr>
+<td align="center">25</td>
+<td align="center">26</td>
+<td align="center">27</td>
+</tr>
+<tr>
+<td align="center">24</td>
+<td align="center">30</td>
+<td align="center">19</td>
+</tr>
+<tr>
+<td align="center">25</td>
+<td align="center">27</td>
+<td align="center">23</td>
+</tr>
+<tr>
+<td align="center">24</td>
+<td align="center">26</td>
+<td align="center">17</td>
+</tr>
+<tr>
+<td align="center">23</td>
+<td align="center">23</td>
+<td align="center"></td>
+</tr>
+</tbody></table>
+
+</section>
+<section id="slide-4">
+  <div class="page-header">
+    <h2>Some Information about the ACT Data</h2>
+  </div>
+  
+<div class="quiz quiz-single well ">
+  <p>What are \(n_1\), \(n_2\), \(n_3\)?  How about \(y_{12}\)?</p>
+
+<ol>
+<li>7; 8; 8; 27</li>
+<li><em>8; 8; 7; 21</em></li>
+<li>8; 7; 8; 25</li>
+<li>8; 8; 7; 25</li>
+<li>7; 8; 8; 22</li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  <div class="quiz-hint">
+  <p>What is the sample size of each group?  What is the value of the first observation in group 2?</p>
+
+</div>
+<div class="quiz-explanation">
+  <p>There are 8 observations in both the baseball and non-athletes groups, but only 7 in the football group.  The first row in the second column is \(y_{12}\).</p>
+
+</div>
+</div>
+</section>
+
+      </div>  <!-- end content -->
+
+      <div class = "col-md-3">
+        <div class = "page-sidebar hidden-print hidden-xs hidden-sm affix-top">
+          <ul class = "nav navlist">
+            
+            <li><a href = "#slide-1"> Introduction</a></li>
+
+            <li><a href = "#slide-2"> The Insect Sprays Data</a></li>
+
+            <li><a href = "#slide-3"> The ACT Data</a></li>
+
+            <li><a href = "#slide-4"> Some Information about the ACT Data</a></li>
+          </ul>
+        </div>
+      </div>  <!-- end sidebar -->
+
+    </div>  <!-- end row -->
+
+   
+      <!-- Footer -->
+      <footer id="top" role="footer">
+        <div class="container text-center">
+          <span class="text-muted">Built by <a href="http://slidify.org/">Slidify</a>.  Styled using <a href="http://getbootstrap.com/">Bootstrap</a>.  Theme by <a href="http://bootswatch.com/">Bootswatch</a>.  Hosted on <a href="https://github.com/">GitHub</a>.</span>
+        </div>
+      </footer>
+
+  </div>  <!-- end container -->
+</body>
+  <script src="libraries/frameworks/bootstrap3/js/bootstrap.min.js"></script>
+  <script src="libraries/frameworks/bootstrap3/js/plugins.js"></script>
+  <script src="libraries/frameworks/bootstrap3/js/main.js"></script>
+  <!-- Load Javascripts for Widgets -->
+  <script src="libraries/widgets/quiz/js/jquery.quiz.js"></script>
+<script src="libraries/widgets/quiz/js/mustache.min.js"></script>
+<script src="libraries/widgets/quiz/js/quiz-app.js"></script>
+
+  
+  <!-- MathJax: Fall back to local if CDN offline but local image fonts are not supported (saves >100MB) -->
+  <script type="text/x-mathjax-config">
+    MathJax.Hub.Config({
+      tex2jax: {
+        inlineMath: [['$','$'], ['\\(','\\)']],
+        processEscapes: true
+      }
+    });
+  </script>
+  <script type="text/javascript" src="http://cdn.mathjax.org/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  <!-- <script src="https://c328740.ssl.cf1.rackcdn.com/mathjax/2.0-latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+  </script> -->
+  <script>window.MathJax || document.write('<script type="text/x-mathjax-config">MathJax.Hub.Config({"HTML-CSS":{imageFont:null}});<\/script><script src="libraries/widgets/mathjax/MathJax.js?config=TeX-AMS-MML_HTMLorMML"><\/script>')
+</script>
+</html>
