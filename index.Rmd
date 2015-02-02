@@ -344,10 +344,12 @@ pf(34.7, 5, 66, lower.tail = F)
 4) An $F(2,20)$ is plotted below.  Draw this plot with a line for the test statistic in the questions you turn in.  Shade the part of the distribution you will use to find the p-value.  If you are typing this assignment, you can do this in Paint.  
 
 ```{r act-null-distn, echo=FALSE}
-ggplot() + 
-  geom_histogram(aes(rf(1000, 2, 20)), colour = "darkgreen", fill = "grey") +
+dat0 <- dplyr::data_frame(f = seq(0.05, 6, by = .05), 
+                          density = df(f, 2, 20))
+ggplot(dat0, aes(x = f, ymax = density, ymin = 0)) + 
+  geom_ribbon(colour = "darkgreen", fill = "lightgrey", size = I(1.03)) +
   theme_bw() + 
-  labs(x = "F", title = "F(2,20)")
+  labs(x = "F", y = "density", title = "F(2,20)")
 ```
 
 --- &multitext
