@@ -259,6 +259,11 @@ Recall that $SS / df = MS$.  The F-statistic is equal to the ratio of $MS_A$ to 
 2. <span class='answer'>35.5</span>
 3. <span class='answer'>4.56</span>
 
+---
+## One-Way ANOVA Test Statistics
+
+When doing ANOVA, the test statistic is always located in the "F value" column in R.  It follows an F-distribution with two degrees of freedom.  The first, called the numerator df, is equal to the number of groups minus one ($J-1$).  The second, called the denominator df, is equal to the sample size minus the number of groups ($N-J$).
+
 --- &radio
 ## ACT Test Statistic Distribution
 
@@ -383,6 +388,14 @@ What is your decision for the ACT data?
 
 *** .hint
 Recall that the significance level was 0.05
+
+---
+## Conclusions for One-Way ANOVA
+
+The conclusion is always a statement about the decision of the null hypothesis in the context of the problem.  So, for a One-Way ANOVA, it is a statement about whether or not we conclude that at least one group has a different mean than the others.
+
+For the insect sprays data:
+* The evidence strongly suggests that the true mean number of insects is different for at least one type of insecticide.
 
 ---
 ## Additional Take Home Questions

@@ -526,6 +526,13 @@ summary(lm2)
 </section>
 <section id="slide-17">
   <div class="page-header">
+    <h2>One-Way ANOVA Test Statistics</h2>
+  </div>
+  <p>When doing ANOVA, the test statistic is always located in the &quot;F value&quot; column in R.  It follows an F-distribution with two degrees of freedom.  The first, called the numerator df, is equal to the number of groups minus one (\(J-1\)).  The second, called the denominator df, is equal to the sample size minus the number of groups (\(N-J\)).</p>
+
+</section>
+<section id="slide-18">
+  <div class="page-header">
     <h2>ACT Test Statistic Distribution</h2>
   </div>
   
@@ -556,7 +563,7 @@ summary(lm2)
 </div>
 </div>
 </section>
-<section id="slide-18">
+<section id="slide-19">
   <div class="page-header">
     <h2>R Code for an ANOVA Table</h2>
   </div>
@@ -585,7 +592,7 @@ summary(lm2)
 </code></pre>
 
 </section>
-<section id="slide-19">
+<section id="slide-20">
   <div class="page-header">
     <h2>The F-distribution</h2>
   </div>
@@ -602,7 +609,7 @@ summary(lm2)
 <p><img src="assets/fig/f-distn-1.png" title="plot of chunk f-distn" alt="plot of chunk f-distn" style="display: block; margin: auto;" /></p>
 
 </section>
-<section id="slide-20">
+<section id="slide-21">
   <div class="page-header">
     <h2>P-value for Insect Sprays</h2>
   </div>
@@ -619,7 +626,7 @@ summary(lm2)
 </code></pre>
 
 </section>
-<section id="slide-21">
+<section id="slide-22">
   <div class="page-header">
     <h2>Take Home Question #4: ACT Null Distribution</h2>
   </div>
@@ -628,7 +635,7 @@ summary(lm2)
 <p><img src="assets/fig/act-null-distn-1.png" title="plot of chunk act-null-distn" alt="plot of chunk act-null-distn" style="display: block; margin: auto;" /></p>
 
 </section>
-<section id="slide-22">
+<section id="slide-23">
   <div class="page-header">
     <h2>ACT p-value</h2>
   </div>
@@ -668,14 +675,14 @@ summary(lm2)
 </div>
 </div>
 </section>
-<section id="slide-23">
+<section id="slide-24">
   <div class="page-header">
     <h2>Insect Spray Decision</h2>
   </div>
   <p>The p-value was approximately 0 which is less than 0.05 so we reject the null.</p>
 
 </section>
-<section id="slide-24">
+<section id="slide-25">
   <div class="page-header">
     <h2>ACT Decision</h2>
   </div>
@@ -703,7 +710,20 @@ summary(lm2)
 </div>
 </div>
 </section>
-<section id="slide-25">
+<section id="slide-26">
+  <div class="page-header">
+    <h2>Conclusions for One-Way ANOVA</h2>
+  </div>
+  <p>The conclusion is always a statement about the decision of the null hypothesis in the context of the problem.  So, for a One-Way ANOVA, it is a statement about whether or not we conclude that at least one group has a different mean than the others.</p>
+
+<p>For the insect sprays data:</p>
+
+<ul>
+<li>The evidence strongly suggests that the true mean number of insects is different for at least one type of insecticide.</li>
+</ul>
+
+</section>
+<section id="slide-27">
   <div class="page-header">
     <h2>Additional Take Home Questions</h2>
   </div>
@@ -755,23 +775,27 @@ summary(lm2)
 
             <li><a href = "#slide-16"> Completing the ACT ANOVA Table</a></li>
 
-            <li><a href = "#slide-17"> ACT Test Statistic Distribution</a></li>
+            <li><a href = "#slide-17"> One-Way ANOVA Test Statistics</a></li>
 
-            <li><a href = "#slide-18"> R Code for an ANOVA Table</a></li>
+            <li><a href = "#slide-18"> ACT Test Statistic Distribution</a></li>
 
-            <li><a href = "#slide-19"> The F-distribution</a></li>
+            <li><a href = "#slide-19"> R Code for an ANOVA Table</a></li>
 
-            <li><a href = "#slide-20"> P-value for Insect Sprays</a></li>
+            <li><a href = "#slide-20"> The F-distribution</a></li>
 
-            <li><a href = "#slide-21"> Take Home Question #4: ACT Null Distribution</a></li>
+            <li><a href = "#slide-21"> P-value for Insect Sprays</a></li>
 
-            <li><a href = "#slide-22"> ACT p-value</a></li>
+            <li><a href = "#slide-22"> Take Home Question #4: ACT Null Distribution</a></li>
 
-            <li><a href = "#slide-23"> Insect Spray Decision</a></li>
+            <li><a href = "#slide-23"> ACT p-value</a></li>
 
-            <li><a href = "#slide-24"> ACT Decision</a></li>
+            <li><a href = "#slide-24"> Insect Spray Decision</a></li>
 
-            <li><a href = "#slide-25"> Additional Take Home Questions</a></li>
+            <li><a href = "#slide-25"> ACT Decision</a></li>
+
+            <li><a href = "#slide-26"> Conclusions for One-Way ANOVA</a></li>
+
+            <li><a href = "#slide-27"> Additional Take Home Questions</a></li>
           </ul>
         </div>
       </div>  <!-- end sidebar -->
