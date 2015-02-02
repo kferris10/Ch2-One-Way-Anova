@@ -1,5 +1,5 @@
 ---
-title       : Ch 1 - T tests and CIs
+title       : Ch 2 - One Way ANOVA
 subtitle    : Stat 217
 framework   : bootstrap3        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight  # {highlight.js, prettify, highlight}
@@ -10,6 +10,7 @@ knit        : slidify::knit2slides
 layout      : deck3
 assets      : 
   css       : 
+    - "assets/css/table-styles.css"
     - "libraries/frameworks/bootstrap3/css/custom.css"
     - "libraries/frameworks/bootstrap3/css/moving_sidebar.css"
     - "http://fonts.googleapis.com/css?family=Vollkorn"
@@ -31,53 +32,378 @@ opts_chunk$set(echo = T,
                size = "small")
 options(show.signif.stars = F, 
         digits = 3)
+set.seed(99)
+take_home <- 0
 ```
 
 ## Introduction
 
-In this activity ...
+In this activity we will look at two data sets: one on insecticides and the other about ACT scores.  We will perform a One-Way ANOVA on these data using $\alpha = 0.05$ for a significance level.  
+
+Upon completing this activity, you should be comfortable
+
+* setting up the hypotheses for a One-Way ANOVA using either cell means or reference coding (Step 1 of the Six Steps in Hypothesis Testing)
+* writing out models using either reference coding or cell means coding
+* using R output to estimate these Greek letters
+* identifying which level of a variable R treats as the "reference level"
+* filling in ANOVA tables and identifying the test statistic (Step 3)
+* identifying the degrees of freedom for F-distributions
+* using F-distributions to find a p-value (Step 4)
+* making a decision about the null hypothesis (Step 5)
+* writing a conclusion for your hypothesis test in the context of the problem (Step 6)
+
+The "Show Answer" button still does not work.  My apologies.
+
+The questions to turn in to me are not all at the end this time.  I tried to label them "Take Home Questions" throughout the activity.  There should be 8 total.  Please do not forget any.
 
 ---
 ## The Insect Sprays Data
 
-In an agricultural experiment, 72 plots of land were randomly assigned to be treated with one of six different insecticides.  The next day, the number of insects in each plot were counted.  We will test to see if there is a difference in the number of insects for at least one of the sprays.
+In an agricultural experiment, 72 plots of land were randomly assigned to be treated with one of six different insecticides.  The next day, the number of insects in each plot were counted.  We will test to see if there is a difference in the number of insects for at least one of the sprays.  Since there is a quantitative response variable and a single categorical explanatory variable, a One-Way ANOVA is an appropriate procedure for these data.
+
 
 ```{r insect-data}
 data(InsectSprays)  # load the data
 boxplot(count ~ spray, data = InsectSprays)
 ```
 
-
 ---
 ## The ACT Data
+
 A school is interested in comparing ACT scores for students with baseball scholarships, football scholarships, and non-athletes.  Let Group 1 be the Baseball athletes, Group 2 be the non-athletes, and Group 3 be the Football athletes.  They want to know if one of the groups has different ACT scores from the other.  
 
-```{r act-data, results='asis'}
+
+```{r act-data}
 act <- read.csv("act-scores.csv", header = T)
+head(act)
 ```
 
-```{r act-table, echo = FALSE, results='asis'}
-to_print <- data.frame(Baseball = c(25, 22, 19, 25, 24, 25, 24, 23), 
-                       Non.athletes = c(21, 27, 29, 26, 30, 27, 26, 23), 
-                       Football = c(22, 21, 24, 27, 19, 23, 17, ""))
-kable(to_print, format = "markdown", align = "c")
+---
+## Take Home Question #`r take_home <- take_home + 1; take_home`: ACT Boxplots
+
+This is the first question you'll submit to me in your write-up.  
+
+1) Does it appear that one of the types of students has different scores than the others.  
+
+```{r act-plot}
+boxplot(ACT ~ Sport, data = act)
 ```
 
---- &radio
+--- &multitext
 ## Some Information about the ACT Data
 
-What are $n_1$, $n_2$, $n_3$?  How about $y_{12}$?
+The ACT Data
 
-1. 7; 8; 8; 27
-2. _8; 8; 7; 21_
-3. 8; 7; 8; 25
-4. 8; 8; 7; 25
-5. 7; 8; 8; 22
+
+| Baseball | Non.athletes | Football |
+|:--------:|:------------:|:--------:|
+|    25    |      21      |    22    |
+|    22    |      27      |    21    |
+|    19    |      29      |    24    |
+|    25    |      26      |    27    |
+|    24    |      30      |    19    |
+|    25    |      27      |    23    |
+|    24    |      26      |    17    |
+|    23    |      23      |          |
+
+1. What is $n_1$?
+2. What is $n_2$?
+3. What is $n_3$?
+4. What is $y_{12}$?
 *** .hint
 What is the sample size of each group?  What is the value of the first observation in group 2?
 
 *** .explanation
-There are 8 observations in both the baseball and non-athletes groups, but only 7 in the football group.  The first row in the second column is $y_{12}$.
+1. <span class='answer'>8</span>
+2. <span class='answer'>8</span>
+3. <span class='answer'>7</span>
+4. <span class='answer'>21</span>
+
+--- 
+## Insect Sprays Hypotheses
+
+Using cell means coding, the hypotheses are:
+* $H_0: \mu_1 = \mu_2 = \ldots = \mu_6$
+* $H_A$: at least one $\mu_j$ is not equal to the others
+
+Using reference coding, the hypotheses are:
+* $H_0: \tau_1 = \tau_2 = \ldots = \tau_6 = 0$
+* $H_A$: at least one $\tau_j$ is not equal to zero
+
+--- 
+## Take Home Question #`r take_home <- take_home + 1; take_home`: ACT Hypotheses
+
+2) Write out the hypotheses for the ACT Data.  You may use either cell means coding or reference coding.
+
+---
+## Insect Sprays Model
+
+The model below was fit using reference coding.  
+
+* Spray A is the reference level so $\hat{\mu}_A = 14.5$
+* The Greek letter estimated by the `sprayC` line is $\tau_3$.  It estimates the mean difference in insect counts between plots sprayed with Spray C and plots sprayed with Spray A.
+* The estimated mean number of insects in plots sprayed with Spray F is $\hat{\mu}_6 = \hat{\alpha} + \hat{\tau}_6 = 14.5 + 2.167 = 16.667$
+
+
+```{r insect-model}
+lm1 <- lm(count ~ spray, data = InsectSprays)
+summary(lm1)
+```
+
+--- 
+## Take Home Question #`r take_home <- take_home + 1; take_home`: ACT Model
+
+3) Write out the model for the ACT Data.  If you used reference coding in number 2, use that model; if you used cell means coding, then write out the cell means model.
+
+--- &radio
+## ACT Model from R
+
+This code fits the reference coding model, and provides information about the model.  What is the reference group?
+
+
+```{r act-model}
+lm2 <- lm(ACT ~ Sport, data = act)
+summary(lm2)
+```
+
+What is the reference group?  What Greek letter does the SportFootball row estimate?  What is the average ACT of the non-athletes group?
+
+1. Baseball; $\mu_3$; 26.125
+2. Football; $\tau_1$; 23.375
+3. Football; $\tau_2$; 2.75 
+4. Football; $\mu_1$; -1.5179
+5. _Baseball; $\tau_2$; 26.125_
+
+*** .hint
+What sport category is missing?  That's the reference group.
+
+*** .explanation
+The reference group is the one that's not shown.  The rows beginning with "Sport" estimate the deviation from the reference group.  To find the average for the Football group, we add the deviation for that group to the estimate for the reference group.
+
+---
+## Insect Sprays ANOVA Table
+
+Here's a sparse ANOVA table.  Try to fill it in on your own (you should be able to fill in everything except the p-value).  Use the handout containing the formulas in each cell for reference.
+
+|id         |Df  |Sum Sq   |Mean Sq  |F value  |Pr(>F)  |
+|:----------|:---|:-------:|:--------|:--------|:-------|
+|Attr       |    | 2669     |         |         |        |
+|Residuals  |    | 1015     |         |         |        |
+
+
+---
+## Filling in the Insect Sprays ANOVA Table
+
+Let's fill in the rest of it.  The Attr degrees of freedom (df) equals the number of groups minus 1 (J-1) so that equals 5.  The Residual df equals the total sample size minus the number of groups (N-J) which equals 12*6 - 6 = 66.  
+
+The $MS_A = SS_A / $ Attr df $= 2669 / 5 = 534$
+
+The $MS_E = SS_E / $ Residual df $= 1015 / 66 = 15$
+
+The F-statistic $= MS_A / MS_E = 534 / 15 = 34.7$  
+
+It follows an F distribution with 5 numerator and 66 denominator df: $\sim F(5, 66)$
+
+---
+## ACT ANOVA Table Part 1
+
+Let's fill in the ACT ANOVA table.  
+
+|id         |Df  |Sum Sq  |Mean Sq  |F value  |Pr(>F)  |
+|:----------|:---|:-------|:--------|:--------|:-------|
+|Group      |    |        |         |         |        |
+|Residuals  |    |        |         |         |        |
+
+We'll start by providing the correct degrees of freedom
+
+--- &radio
+## Degrees of Freedom for the ACT Data
+
+What degrees of freedom should we use for the Group row?  How about for the Residuals?
+
+1. 2, 24
+2. _2, 20_
+3. 3, 24
+4. 3, 20
+5. 3, 21
+
+*** .hint
+The Group Df is equal to the number of groups minus 1.  The Residuals Df is equal to the number of observations (N) minus the number of groups
+
+*** .explanation
+We have three groups so Group Df = 3-1.  We have a sample size of 23 so the Residual Df = 23-3.
+
+--- 
+## ACT ANOVA Table Part 2
+
+I've filled in a couple more entries in the table.  Next, you'll fill in the Residuals Sum of Squares ($SS_E)$, the Group Mean Squares ($MS_A)$, and the F statistic.
+
+|id         |Df  |Sum Sq  |Mean Sq  |F value  |Pr(>F)  |
+|:----------|:---|:-------|:--------|:--------|:-------|
+|Group      |2   |71.0  |         |         |        |
+|Residuals  |20  |        |7.78    |         |        |
+
+--- &multitext
+## Completing the ACT ANOVA Table
+What is $SS_E$, $MS_A$, and the F-statistic?
+
+1. What is $SS_E$?
+2. What is $MS_A$?
+3. What is the F-statistic?
+
+*** .hint
+Recall that $SS / df = MS$.  The F-statistic is equal to the ratio of $MS_A$ to $MS_E$.
+
+*** .explanation
+1. <span class='answer'>156</span>
+2. <span class='answer'>35.5</span>
+3. <span class='answer'>4.56</span>
+
+--- &radio
+## ACT Test Statistic Distribution
+
+What is the test statistic?  What distribution does it follow?
+
+1. _4.56, ~F(2, 20)_
+2. 35.5, ~t(22)
+3. 4.56, ~t(22)
+4. 4.56, ~F(20)
+5. 4.56, ~F(2)
+6. 35.5, ~F(2, 22)
+
+*** .hint
+The statistic is our F value.  It has two degrees of freedom: the numerator df and the denominator df.
+
+*** .explanation
+The F distribution has two degrees of freedom.  The first is the "numerator" degrees of freedom, and the second is the denominator degrees of freedom.
+
+---
+## R Code for an ANOVA Table
+
+An ANOVA table can be generated in R using the `anova` command
+
+
+```{r r-anova}
+anova(lm1) # for insect sprays data
+anova(lm2) # for ACT data
+```
+
+---
+## The F-distribution
+
+For a One-Way ANOVA, we compare the test statistic to an F-distribution.  Some characteristics of the F-distribution:
+
+* It is always greater than 0.
+* It is right-skewed
+* **We always use the right tail of the F-distribution to find p-values**
+* It has two degrees of freedom called the **numerator df** and the **denominator df**
+* The numerator and denominator degrees of freedom determine the shape of the F-distribution.  Here are examples of F-distributions with different degrees of freedom (from page 77 of your book).
+
+```{r f-distn, fig.width=11, fig.height=8, echo=FALSE}
+library(ggplot2)
+library(ggthemes)
+dat <- dplyr::data_frame(f = rep(seq(.05, 6, by = .05), 4), 
+                         num_df = c(rep(2, 240), rep(6, 240)), 
+                         denom_df = c(rep(111, 120), rep(10, 240), rep(111, 120)), 
+                         density = df(f, num_df, denom_df), 
+                         label = paste0("F(", num_df, ",", denom_df, ")"))
+ggplot(dat, aes(f, density, colour = label)) + 
+  geom_line(size = I(2)) + 
+  facet_wrap(~label) + 
+  theme_few() + 
+  scale_colour_few(guide = F)
+```
+
+---
+## P-value for Insect Sprays
+
+Recall, that we always use the right tail to find a p-value.  An F(5, 66) distribution is plotted below.  The test statistic is labelled with the bright red line.  
+
+```{r insect-null-dist, echo=FALSE}
+ggplot() + 
+  geom_density(aes(rf(1000, 5, 66)), binwidth = .5, colour = "darkgreen", fill = "grey") + 
+  geom_vline(aes(xintercept = 34.7), size = I(1.6), colour = "red") + 
+  theme_bw() + 
+  labs(x = "F", title = "F(5,66)")
+```
+
+Clearly, the test statistic is more extreme than anything we would expect to observe under the null.  We can use the `pf` command to compare our test statistic to the F-distribution.  In R, `3.19e-17` means $3.19 * 10^{-17}$ so we get an incredibly tiny p-value for these data.
+
+```{r insect-pval}
+pf(34.7, 5, 66, lower.tail = F)
+```
+
+---
+## Take Home Question #`r take_home <- take_home + 1; take_home`: ACT Null Distribution
+
+4) An $F(2,20)$ is plotted below.  Draw this plot with a line for the test statistic in the questions you turn in.  Shade the part of the distribution you will use to find the p-value.  If you are typing this assignment, you can do this in Paint.  
+
+```{r act-null-distn, echo=FALSE}
+ggplot() + 
+  geom_histogram(aes(rf(1000, 2, 20)), colour = "darkgreen", fill = "grey") +
+  theme_bw() + 
+  labs(x = "F", title = "F(2,20)")
+```
+
+--- &multitext
+## ACT p-value
+
+Here is the ANOVA table for the ACT data from R
+
+
+```{r act-anova}
+anova(lm2)
+```
+
+1. What is the p-value for the ACT data?
+
+*** .hint
+The $Pr(>F)$ column indicates the probability of observing an F-value greater than or equal to what we actually observed
+
+*** .explanation
+1. <span class='answer'>0.023</span>
+
+
+---
+## Insect Spray Decision
+
+The p-value was approximately 0 which is less than 0.05 so we reject the null.
+
+--- &radio
+## ACT Decision
+
+What is your decision for the ACT data?
+
+1. p-value is less than the significance level so we accept the null
+2. p-value is less than the significance level so we fail to reject the null
+3. _p-value is less than the significance level so we reject the null_
+4. p-value is greater than the significance level so we fail to reject the null
+5. p-value is greater than the significance level so we accept the null
+6. none of the above
+
+*** .hint
+Recall that the significance level was 0.05
+
+---
+## Additional Take Home Questions
+
+5) What is your conclusion for the ACT data?
+
+6) What is the scope of inference for the Insect Sprays data?
+
+7) What is the scope of inference for the ACT data?
+
+8) For these examples, did we conduct parametric tests or non-parametric tests?
+
+
+
+
+
+
+
+
+
+
 
 
 

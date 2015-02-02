@@ -6,7 +6,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Ch 1 - T tests and CIs</title>
+  <title>Ch 2 - One Way ANOVA</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width">
   <link rel="icon" type="image/png" href="favicon.ico">
@@ -21,6 +21,7 @@
   <script>window.jQuery || document.write('<script src="libraries/frameworks/bootstrap3/js/vendor/jquery-1.8.2.min.js"><\/script>')</script>
     <link rel=stylesheet href="libraries/widgets/quiz/css/demo.css"></link>
 <link rel=stylesheet href="./assets/css/ribbons.css"></link>
+<link rel=stylesheet href="./assets/css/table-styles.css"></link>
 <link rel=stylesheet href="libraries/frameworks/bootstrap3/css/custom.css"></link>
 <link rel=stylesheet href="libraries/frameworks/bootstrap3/css/moving_sidebar.css"></link>
 <link rel=stylesheet href="http://fonts.googleapis.com/css?family=Vollkorn"></link>
@@ -48,7 +49,7 @@
 
         <div class="jumbotron">
           <div class="container">
-            <h1>Ch 1 - T tests and CIs</h1>
+            <h1>Ch 2 - One Way ANOVA</h1>
             <h3>Stat 217</h3>
           </div>
         </div>
@@ -57,14 +58,32 @@
   <div class="page-header">
     <h2>Introduction</h2>
   </div>
-  <p>In this activity ...</p>
+  <p>In this activity we will look at two data sets: one on insecticides and the other about ACT scores.  We will perform a One-Way ANOVA on these data using \(\alpha = 0.05\) for a significance level.  </p>
+
+<p>Upon completing this activity, you should be comfortable</p>
+
+<ul>
+<li>setting up the hypotheses for a One-Way ANOVA using either cell means or reference coding (Step 1 of the Six Steps in Hypothesis Testing)</li>
+<li>writing out models using either reference coding or cell means coding</li>
+<li>using R output to estimate these Greek letters</li>
+<li>identifying which level of a variable R treats as the &quot;reference level&quot;</li>
+<li>filling in ANOVA tables and identifying the test statistic (Step 3)</li>
+<li>identifying the degrees of freedom for F-distributions</li>
+<li>using F-distributions to find a p-value (Step 4)</li>
+<li>making a decision about the null hypothesis (Step 5)</li>
+<li>writing a conclusion for your hypothesis test in the context of the problem (Step 6)</li>
+</ul>
+
+<p>The &quot;Show Answer&quot; button still does not work.  My apologies.</p>
+
+<p>The questions to turn in to me are not all at the end this time.  I tried to label them &quot;Take Home Questions&quot; throughout the activity.  There should be 8 total.  Please do not forget any.</p>
 
 </section>
 <section id="slide-2">
   <div class="page-header">
     <h2>The Insect Sprays Data</h2>
   </div>
-  <p>In an agricultural experiment, 72 plots of land were randomly assigned to be treated with one of six different insecticides.  The next day, the number of insects in each plot were counted.  We will test to see if there is a difference in the number of insects for at least one of the sprays.</p>
+  <p>In an agricultural experiment, 72 plots of land were randomly assigned to be treated with one of six different insecticides.  The next day, the number of insects in each plot were counted.  We will test to see if there is a difference in the number of insects for at least one of the sprays.  Since there is a quantitative response variable and a single categorical explanatory variable, a One-Way ANOVA is an appropriate procedure for these data.</p>
 
 <pre><code class="r">data(InsectSprays)  # load the data
 boxplot(count ~ spray, data = InsectSprays)
@@ -80,7 +99,40 @@ boxplot(count ~ spray, data = InsectSprays)
   <p>A school is interested in comparing ACT scores for students with baseball scholarships, football scholarships, and non-athletes.  Let Group 1 be the Baseball athletes, Group 2 be the non-athletes, and Group 3 be the Football athletes.  They want to know if one of the groups has different ACT scores from the other.  </p>
 
 <pre><code class="r">act &lt;- read.csv(&quot;act-scores.csv&quot;, header = T)
+head(act)
 </code></pre>
+
+<pre><code>#&gt;      Sport ACT
+#&gt; 1 Baseball  25
+#&gt; 2 Baseball  22
+#&gt; 3 Baseball  19
+#&gt; 4 Baseball  25
+#&gt; 5 Baseball  24
+#&gt; 6 Baseball  25
+</code></pre>
+
+</section>
+<section id="slide-4">
+  <div class="page-header">
+    <h2>Take Home Question #1: ACT Boxplots</h2>
+  </div>
+  <p>This is the first question you&#39;ll submit to me in your write-up.  </p>
+
+<p>1) Does it appear that one of the types of students has different scores than the others.  </p>
+
+<pre><code class="r">boxplot(ACT ~ Sport, data = act)
+</code></pre>
+
+<p><img src="assets/fig/act-plot-1.png" title="plot of chunk act-plot" alt="plot of chunk act-plot" style="display: block; margin: auto;" /></p>
+
+</section>
+<section id="slide-5">
+  <div class="page-header">
+    <h2>Some Information about the ACT Data</h2>
+  </div>
+  
+<div class="quiz-text quiz-multitext well">
+  <p>The ACT Data</p>
 
 <table><thead>
 <tr>
@@ -131,21 +183,11 @@ boxplot(count ~ spray, data = InsectSprays)
 </tr>
 </tbody></table>
 
-</section>
-<section id="slide-4">
-  <div class="page-header">
-    <h2>Some Information about the ACT Data</h2>
-  </div>
-  
-<div class="quiz quiz-single well ">
-  <p>What are \(n_1\), \(n_2\), \(n_3\)?  How about \(y_{12}\)?</p>
-
 <ol>
-<li>7; 8; 8; 27</li>
-<li><em>8; 8; 7; 21</em></li>
-<li>8; 7; 8; 25</li>
-<li>8; 8; 7; 25</li>
-<li>7; 8; 8; 22</li>
+<li>What is \(n_1\)?</li>
+<li>What is \(n_2\)?</li>
+<li>What is \(n_3\)?</li>
+<li>What is \(y_{12}\)?</li>
 </ol>
 
   <button class="quiz-submit btn btn-primary">Submit</button>
@@ -158,10 +200,521 @@ boxplot(count ~ spray, data = InsectSprays)
 
 </div>
 <div class="quiz-explanation">
-  <p>There are 8 observations in both the baseball and non-athletes groups, but only 7 in the football group.  The first row in the second column is \(y_{12}\).</p>
+  <ol>
+<li><span class='answer'>8</span></li>
+<li><span class='answer'>8</span></li>
+<li><span class='answer'>7</span></li>
+<li><span class='answer'>21</span></li>
+</ol>
 
 </div>
 </div>
+</section>
+<section id="slide-6">
+  <div class="page-header">
+    <h2>Insect Sprays Hypotheses</h2>
+  </div>
+  <p>Using cell means coding, the hypotheses are:</p>
+
+<ul>
+<li>\(H_0: \mu_1 = \mu_2 = \ldots = \mu_6\)</li>
+<li>\(H_A\): at least one \(\mu_j\) is not equal to the others</li>
+</ul>
+
+<p>Using reference coding, the hypotheses are:</p>
+
+<ul>
+<li>\(H_0: \tau_1 = \tau_2 = \ldots = \tau_6 = 0\)</li>
+<li>\(H_A\): at least one \(\tau_j\) is not equal to zero</li>
+</ul>
+
+</section>
+<section id="slide-7">
+  <div class="page-header">
+    <h2>Take Home Question #2: ACT Hypotheses</h2>
+  </div>
+  <p>2) Write out the hypotheses for the ACT Data.  You may use either cell means coding or reference coding.</p>
+
+</section>
+<section id="slide-8">
+  <div class="page-header">
+    <h2>Insect Sprays Model</h2>
+  </div>
+  <p>The model below was fit using reference coding.  </p>
+
+<ul>
+<li>Spray A is the reference level so \(\hat{\mu}_A = 14.5\)</li>
+<li>The Greek letter estimated by the <code>sprayC</code> line is \(\tau_3\).  It estimates the mean difference in insect counts between plots sprayed with Spray C and plots sprayed with Spray A.</li>
+<li>The estimated mean number of insects in plots sprayed with Spray F is \(\hat{\mu}_6 = \hat{\alpha} + \hat{\tau}_6 = 14.5 + 2.167 = 16.667\)</li>
+</ul>
+
+<pre><code class="r">lm1 &lt;- lm(count ~ spray, data = InsectSprays)
+summary(lm1)
+</code></pre>
+
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; lm(formula = count ~ spray, data = InsectSprays)
+#&gt; 
+#&gt; Residuals:
+#&gt;    Min     1Q Median     3Q    Max 
+#&gt;  -8.33  -1.96  -0.50   1.67   9.33 
+#&gt; 
+#&gt; Coefficients:
+#&gt;             Estimate Std. Error t value Pr(&gt;|t|)
+#&gt; (Intercept)   14.500      1.132   12.81  &lt; 2e-16
+#&gt; sprayB         0.833      1.601    0.52     0.60
+#&gt; sprayC       -12.417      1.601   -7.76  7.3e-11
+#&gt; sprayD        -9.583      1.601   -5.99  9.8e-08
+#&gt; sprayE       -11.000      1.601   -6.87  2.8e-09
+#&gt; sprayF         2.167      1.601    1.35     0.18
+#&gt; 
+#&gt; Residual standard error: 3.92 on 66 degrees of freedom
+#&gt; Multiple R-squared:  0.724,  Adjusted R-squared:  0.704 
+#&gt; F-statistic: 34.7 on 5 and 66 DF,  p-value: &lt;2e-16
+</code></pre>
+
+</section>
+<section id="slide-9">
+  <div class="page-header">
+    <h2>Take Home Question #3: ACT Model</h2>
+  </div>
+  <p>3) Write out the model for the ACT Data.  If you used reference coding in number 2, use that model; if you used cell means coding, then write out the cell means model.</p>
+
+</section>
+<section id="slide-10">
+  <div class="page-header">
+    <h2>ACT Model from R</h2>
+  </div>
+  
+<div class="quiz quiz-single well ">
+  <p>This code fits the reference coding model, and provides information about the model.  What is the reference group?</p>
+
+<pre><code class="r">lm2 &lt;- lm(ACT ~ Sport, data = act)
+summary(lm2)
+</code></pre>
+
+<pre><code>#&gt; 
+#&gt; Call:
+#&gt; lm(formula = ACT ~ Sport, data = act)
+#&gt; 
+#&gt; Residuals:
+#&gt;    Min     1Q Median     3Q    Max 
+#&gt; -5.125 -1.116  0.625  1.625  5.143 
+#&gt; 
+#&gt; Coefficients:
+#&gt;                   Estimate Std. Error t value Pr(&gt;|t|)
+#&gt; (Intercept)         23.375      0.986   23.70  4.1e-16
+#&gt; SportFootball       -1.518      1.444   -1.05    0.306
+#&gt; SportNon.athletes    2.750      1.395    1.97    0.063
+#&gt; 
+#&gt; Residual standard error: 2.79 on 20 degrees of freedom
+#&gt; Multiple R-squared:  0.313,  Adjusted R-squared:  0.245 
+#&gt; F-statistic: 4.56 on 2 and 20 DF,  p-value: 0.0233
+</code></pre>
+
+<p>What is the reference group?  What Greek letter does the SportFootball row estimate?  What is the average ACT of the non-athletes group?</p>
+
+<ol>
+<li>Baseball; \(\mu_3\); 26.125</li>
+<li>Football; \(\tau_1\); 23.375</li>
+<li>Football; \(\tau_2\); 2.75 </li>
+<li>Football; \(\mu_1\); -1.5179</li>
+<li><em>Baseball; \(\tau_2\); 26.125</em></li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  <div class="quiz-hint">
+  <p>What sport category is missing?  That&#39;s the reference group.</p>
+
+</div>
+<div class="quiz-explanation">
+  <p>The reference group is the one that&#39;s not shown.  The rows beginning with &quot;Sport&quot; estimate the deviation from the reference group.  To find the average for the Football group, we add the deviation for that group to the estimate for the reference group.</p>
+
+</div>
+</div>
+</section>
+<section id="slide-11">
+  <div class="page-header">
+    <h2>Insect Sprays ANOVA Table</h2>
+  </div>
+  <p>Here&#39;s a sparse ANOVA table.  Try to fill it in on your own (you should be able to fill in everything except the p-value).  Use the handout containing the formulas in each cell for reference.</p>
+
+<table><thead>
+<tr>
+<th align="left">id</th>
+<th align="left">Df</th>
+<th align="center">Sum Sq</th>
+<th align="left">Mean Sq</th>
+<th align="left">F value</th>
+<th align="left">Pr(&gt;F)</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Attr</td>
+<td align="left"></td>
+<td align="center">2669</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Residuals</td>
+<td align="left"></td>
+<td align="center">1015</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+
+</section>
+<section id="slide-12">
+  <div class="page-header">
+    <h2>Filling in the Insect Sprays ANOVA Table</h2>
+  </div>
+  <p>Let&#39;s fill in the rest of it.  The Attr degrees of freedom (df) equals the number of groups minus 1 (J-1) so that equals 5.  The Residual df equals the total sample size minus the number of groups (N-J) which equals 12*6 - 6 = 66.  </p>
+
+<p>The $MS_A = SS_A / $ Attr df \(= 2669 / 5 = 534\)</p>
+
+<p>The $MS_E = SS_E / $ Residual df \(= 1015 / 66 = 15\)</p>
+
+<p>The F-statistic \(= MS_A / MS_E = 534 / 15 = 34.7\)  </p>
+
+<p>It follows an F distribution with 5 numerator and 66 denominator df: \(\sim F(5, 66)\)</p>
+
+</section>
+<section id="slide-13">
+  <div class="page-header">
+    <h2>ACT ANOVA Table Part 1</h2>
+  </div>
+  <p>Let&#39;s fill in the ACT ANOVA table.  </p>
+
+<table><thead>
+<tr>
+<th align="left">id</th>
+<th align="left">Df</th>
+<th align="left">Sum Sq</th>
+<th align="left">Mean Sq</th>
+<th align="left">F value</th>
+<th align="left">Pr(&gt;F)</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Group</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Residuals</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+
+<p>We&#39;ll start by providing the correct degrees of freedom</p>
+
+</section>
+<section id="slide-14">
+  <div class="page-header">
+    <h2>Degrees of Freedom for the ACT Data</h2>
+  </div>
+  
+<div class="quiz quiz-single well ">
+  <p>What degrees of freedom should we use for the Group row?  How about for the Residuals?</p>
+
+<ol>
+<li>2, 24</li>
+<li><em>2, 20</em></li>
+<li>3, 24</li>
+<li>3, 20</li>
+<li>3, 21</li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  <div class="quiz-hint">
+  <p>The Group Df is equal to the number of groups minus 1.  The Residuals Df is equal to the number of observations (N) minus the number of groups</p>
+
+</div>
+<div class="quiz-explanation">
+  <p>We have three groups so Group Df = 3-1.  We have a sample size of 23 so the Residual Df = 23-3.</p>
+
+</div>
+</div>
+</section>
+<section id="slide-15">
+  <div class="page-header">
+    <h2>ACT ANOVA Table Part 2</h2>
+  </div>
+  <p>I&#39;ve filled in a couple more entries in the table.  Next, you&#39;ll fill in the Residuals Sum of Squares (\(SS_E)\), the Group Mean Squares (\(MS_A)\), and the F statistic.</p>
+
+<table><thead>
+<tr>
+<th align="left">id</th>
+<th align="left">Df</th>
+<th align="left">Sum Sq</th>
+<th align="left">Mean Sq</th>
+<th align="left">F value</th>
+<th align="left">Pr(&gt;F)</th>
+</tr>
+</thead><tbody>
+<tr>
+<td align="left">Group</td>
+<td align="left">2</td>
+<td align="left">71.0</td>
+<td align="left"></td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+<tr>
+<td align="left">Residuals</td>
+<td align="left">20</td>
+<td align="left"></td>
+<td align="left">7.78</td>
+<td align="left"></td>
+<td align="left"></td>
+</tr>
+</tbody></table>
+
+</section>
+<section id="slide-16">
+  <div class="page-header">
+    <h2>Completing the ACT ANOVA Table</h2>
+  </div>
+  
+<div class="quiz-text quiz-multitext well">
+  <p>What is \(SS_E\), \(MS_A\), and the F-statistic?</p>
+
+<ol>
+<li>What is \(SS_E\)?</li>
+<li>What is \(MS_A\)?</li>
+<li>What is the F-statistic?</li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  <div class="quiz-hint">
+  <p>Recall that \(SS / df = MS\).  The F-statistic is equal to the ratio of \(MS_A\) to \(MS_E\).</p>
+
+</div>
+<div class="quiz-explanation">
+  <ol>
+<li><span class='answer'>156</span></li>
+<li><span class='answer'>35.5</span></li>
+<li><span class='answer'>4.56</span></li>
+</ol>
+
+</div>
+</div>
+</section>
+<section id="slide-17">
+  <div class="page-header">
+    <h2>ACT Test Statistic Distribution</h2>
+  </div>
+  
+<div class="quiz quiz-single well ">
+  <p>What is the test statistic?  What distribution does it follow?</p>
+
+<ol>
+<li><em>4.56, ~F(2, 20)</em></li>
+<li>35.5, ~t(22)</li>
+<li>4.56, ~t(22)</li>
+<li>4.56, ~F(20)</li>
+<li>4.56, ~F(2)</li>
+<li>35.5, ~F(2, 22)</li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  <div class="quiz-hint">
+  <p>The statistic is our F value.  It has two degrees of freedom: the numerator df and the denominator df.</p>
+
+</div>
+<div class="quiz-explanation">
+  <p>The F distribution has two degrees of freedom.  The first is the &quot;numerator&quot; degrees of freedom, and the second is the denominator degrees of freedom.</p>
+
+</div>
+</div>
+</section>
+<section id="slide-18">
+  <div class="page-header">
+    <h2>R Code for an ANOVA Table</h2>
+  </div>
+  <p>An ANOVA table can be generated in R using the <code>anova</code> command</p>
+
+<pre><code class="r">anova(lm1) # for insect sprays data
+</code></pre>
+
+<pre><code>#&gt; Analysis of Variance Table
+#&gt; 
+#&gt; Response: count
+#&gt;           Df Sum Sq Mean Sq F value Pr(&gt;F)
+#&gt; spray      5   2669     534    34.7 &lt;2e-16
+#&gt; Residuals 66   1015      15
+</code></pre>
+
+<pre><code class="r">anova(lm2) # for ACT data
+</code></pre>
+
+<pre><code>#&gt; Analysis of Variance Table
+#&gt; 
+#&gt; Response: ACT
+#&gt;           Df Sum Sq Mean Sq F value Pr(&gt;F)
+#&gt; Sport      2     71    35.5    4.56  0.023
+#&gt; Residuals 20    156     7.8
+</code></pre>
+
+</section>
+<section id="slide-19">
+  <div class="page-header">
+    <h2>The F-distribution</h2>
+  </div>
+  <p>For a One-Way ANOVA, we compare the test statistic to an F-distribution.  Some characteristics of the F-distribution:</p>
+
+<ul>
+<li>It is always greater than 0.</li>
+<li>It is right-skewed</li>
+<li><strong>We always use the right tail of the F-distribution to find p-values</strong></li>
+<li>It has two degrees of freedom called the <strong>numerator df</strong> and the <strong>denominator df</strong></li>
+<li>The numerator and denominator degrees of freedom determine the shape of the F-distribution.  Here are examples of F-distributions with different degrees of freedom (from page 77 of your book).</li>
+</ul>
+
+<p><img src="assets/fig/f-distn-1.png" title="plot of chunk f-distn" alt="plot of chunk f-distn" style="display: block; margin: auto;" /></p>
+
+</section>
+<section id="slide-20">
+  <div class="page-header">
+    <h2>P-value for Insect Sprays</h2>
+  </div>
+  <p>Recall, that we always use the right tail to find a p-value.  An F(5, 66) distribution is plotted below.  The test statistic is labelled with the bright red line.  </p>
+
+<p><img src="assets/fig/insect-null-dist-1.png" title="plot of chunk insect-null-dist" alt="plot of chunk insect-null-dist" style="display: block; margin: auto;" /></p>
+
+<p>Clearly, the test statistic is more extreme than anything we would expect to observe under the null.  We can use the <code>pf</code> command to compare our test statistic to the F-distribution.  In R, <code>3.19e-17</code> means \(3.19 * 10^{-17}\) so we get an incredibly tiny p-value for these data.</p>
+
+<pre><code class="r">pf(34.7, 5, 66, lower.tail = F)
+</code></pre>
+
+<pre><code>#&gt; [1] 3.19e-17
+</code></pre>
+
+</section>
+<section id="slide-21">
+  <div class="page-header">
+    <h2>Take Home Question #4: ACT Null Distribution</h2>
+  </div>
+  <p>4) An \(F(2,20)\) is plotted below.  Draw this plot with a line for the test statistic in the questions you turn in.  Shade the part of the distribution you will use to find the p-value.  If you are typing this assignment, you can do this in Paint.  </p>
+
+<p><img src="assets/fig/act-null-distn-1.png" title="plot of chunk act-null-distn" alt="plot of chunk act-null-distn" style="display: block; margin: auto;" /></p>
+
+</section>
+<section id="slide-22">
+  <div class="page-header">
+    <h2>ACT p-value</h2>
+  </div>
+  
+<div class="quiz-text quiz-multitext well">
+  <p>Here is the ANOVA table for the ACT data from R</p>
+
+<pre><code class="r">anova(lm2)
+</code></pre>
+
+<pre><code>#&gt; Analysis of Variance Table
+#&gt; 
+#&gt; Response: ACT
+#&gt;           Df Sum Sq Mean Sq F value Pr(&gt;F)
+#&gt; Sport      2     71    35.5    4.56  0.023
+#&gt; Residuals 20    156     7.8
+</code></pre>
+
+<ol>
+<li>What is the p-value for the ACT data?</li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  <div class="quiz-hint">
+  <p>The \(Pr(>F)\) column indicates the probability of observing an F-value greater than or equal to what we actually observed</p>
+
+</div>
+<div class="quiz-explanation">
+  <ol>
+<li><span class='answer'>0.023</span></li>
+</ol>
+
+</div>
+</div>
+</section>
+<section id="slide-23">
+  <div class="page-header">
+    <h2>Insect Spray Decision</h2>
+  </div>
+  <p>The p-value was approximately 0 which is less than 0.05 so we reject the null.</p>
+
+</section>
+<section id="slide-24">
+  <div class="page-header">
+    <h2>ACT Decision</h2>
+  </div>
+  
+<div class="quiz quiz-single well ">
+  <p>What is your decision for the ACT data?</p>
+
+<ol>
+<li>p-value is less than the significance level so we accept the null</li>
+<li>p-value is less than the significance level so we fail to reject the null</li>
+<li><em>p-value is less than the significance level so we reject the null</em></li>
+<li>p-value is greater than the significance level so we fail to reject the null</li>
+<li>p-value is greater than the significance level so we accept the null</li>
+<li>none of the above</li>
+</ol>
+
+  <button class="quiz-submit btn btn-primary">Submit</button>
+  <button class="quiz-toggle-hint btn btn-info">Show Hint</button>
+  <button class="quiz-show-answer btn btn-success">Show Answer</button>
+  <button class="quiz-clear btn btn-danger">Clear</button>
+  
+  <div class="quiz-hint">
+  <p>Recall that the significance level was 0.05</p>
+
+</div>
+</div>
+</section>
+<section id="slide-25">
+  <div class="page-header">
+    <h2>Additional Take Home Questions</h2>
+  </div>
+  <p>5) What is your conclusion for the ACT data?</p>
+
+<p>6) What is the scope of inference for the Insect Sprays data?</p>
+
+<p>7) What is the scope of inference for the ACT data?</p>
+
+<p>8) For these examples, did we conduct parametric tests or non-parametric tests?</p>
+
 </section>
 
       </div>  <!-- end content -->
@@ -176,7 +729,49 @@ boxplot(count ~ spray, data = InsectSprays)
 
             <li><a href = "#slide-3"> The ACT Data</a></li>
 
-            <li><a href = "#slide-4"> Some Information about the ACT Data</a></li>
+            <li><a href = "#slide-4"> Take Home Question #1: ACT Boxplots</a></li>
+
+            <li><a href = "#slide-5"> Some Information about the ACT Data</a></li>
+
+            <li><a href = "#slide-6"> Insect Sprays Hypotheses</a></li>
+
+            <li><a href = "#slide-7"> Take Home Question #2: ACT Hypotheses</a></li>
+
+            <li><a href = "#slide-8"> Insect Sprays Model</a></li>
+
+            <li><a href = "#slide-9"> Take Home Question #3: ACT Model</a></li>
+
+            <li><a href = "#slide-10"> ACT Model from R</a></li>
+
+            <li><a href = "#slide-11"> Insect Sprays ANOVA Table</a></li>
+
+            <li><a href = "#slide-12"> Filling in the Insect Sprays ANOVA Table</a></li>
+
+            <li><a href = "#slide-13"> ACT ANOVA Table Part 1</a></li>
+
+            <li><a href = "#slide-14"> Degrees of Freedom for the ACT Data</a></li>
+
+            <li><a href = "#slide-15"> ACT ANOVA Table Part 2</a></li>
+
+            <li><a href = "#slide-16"> Completing the ACT ANOVA Table</a></li>
+
+            <li><a href = "#slide-17"> ACT Test Statistic Distribution</a></li>
+
+            <li><a href = "#slide-18"> R Code for an ANOVA Table</a></li>
+
+            <li><a href = "#slide-19"> The F-distribution</a></li>
+
+            <li><a href = "#slide-20"> P-value for Insect Sprays</a></li>
+
+            <li><a href = "#slide-21"> Take Home Question #4: ACT Null Distribution</a></li>
+
+            <li><a href = "#slide-22"> ACT p-value</a></li>
+
+            <li><a href = "#slide-23"> Insect Spray Decision</a></li>
+
+            <li><a href = "#slide-24"> ACT Decision</a></li>
+
+            <li><a href = "#slide-25"> Additional Take Home Questions</a></li>
           </ul>
         </div>
       </div>  <!-- end sidebar -->
