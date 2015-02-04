@@ -61,7 +61,7 @@ A school is interested in comparing ACT scores for students with baseball schola
 
 
 ```r
-act <- read.csv("act-scores.csv", header = T)
+act <- read.csv("act.csv", header = T)
 head(act)
 ```
 
