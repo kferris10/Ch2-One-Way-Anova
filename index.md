@@ -109,7 +109,7 @@ The ACT Data
 1. What is $n_1$?
 2. What is $n_2$?
 3. What is $n_3$?
-4. What is $y_{12}$?
+4. What is $y_{1,2}$?
 *** .hint
 What is the sample size of each group?  What is the value of the first observation in group 2?
 
