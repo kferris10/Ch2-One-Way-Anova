@@ -1,18 +1,20 @@
 ---
-title       : Ch 2 - One Way ANOVA
-subtitle    : Stat 217
-framework   : bootstrap3        # {io2012, html5slides, shower, dzslides, ...}
-highlighter : highlight  # {highlight.js, prettify, highlight}
-hitheme     : tomorrow      # 
-widgets     : [quiz, mathjax]            # {mathjax, quiz, bootstrap}
-mode        : selfcontained # {standalone, draft}
+title       : One Way ANOVA
+subtitle    : Chapter 2
+author      : Stat 217
+today       : February 6, 2015
+framework   : bootstrap3    
+highlighter : highlight.js 
+hitheme     : google_code      
+widgets     : [quiz, mathjax]  
+mode        : selfcontained 
 knit        : slidify::knit2slides
 layout      : deck3
 assets      : 
   css       : 
+    - "assets/css/custom.css"
+    - "assets/css/moving_sidebar.css"
     - "assets/css/table-styles.css"
-    - "libraries/frameworks/bootstrap3/css/custom.css"
-    - "libraries/frameworks/bootstrap3/css/moving_sidebar.css"
     - "http://fonts.googleapis.com/css?family=Vollkorn"
     - "http://fonts.googleapis.com/css?family=Droid%20Sans%20Mono"
 ---
